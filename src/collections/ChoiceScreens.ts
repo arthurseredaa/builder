@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload'
 
-export const SingleChoices: CollectionConfig = {
-  slug: 'single-choices',
+export const ChoiceScreens: CollectionConfig = {
+  slug: 'choice-screens',
   fields: [
     {
       name: 'question',
@@ -16,6 +16,16 @@ export const SingleChoices: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media'
+    },
+    {
+      name: 'questionType',
+      type: 'select',
+      options: [
+        { label: 'Single Choice', value: 'single' },
+        { label: 'Multiple Choice', value: 'multiple' },
+      ],
+      defaultValue: 'single',
+      required: true,
     },
     {
       name: 'choices',
@@ -45,7 +55,7 @@ export const SingleChoices: CollectionConfig = {
       ],
     },
     {
-      name: 'cta_text',
+      name: 'ctaText',
       type: 'text',
     },
   ]

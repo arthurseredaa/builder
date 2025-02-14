@@ -66,7 +66,8 @@ export interface Config {
   };
   collections: {
     'content-screens': ContentScreen;
-    'single-choices': SingleChoice;
+    'choice-screens': ChoiceScreen;
+    funnels: Funnel;
     users: User;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
@@ -76,7 +77,8 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     'content-screens': ContentScreensSelect<false> | ContentScreensSelect<true>;
-    'single-choices': SingleChoicesSelect<false> | SingleChoicesSelect<true>;
+    'choice-screens': ChoiceScreensSelect<false> | ChoiceScreensSelect<true>;
+    funnels: FunnelsSelect<false> | FunnelsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -138,7 +140,7 @@ export interface ContentScreen {
     [k: string]: unknown;
   } | null;
   image?: (string | null) | Media;
-  cta_text?: string | null;
+  ctaText?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -163,9 +165,9 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "single-choices".
+ * via the `definition` "choice-screens".
  */
-export interface SingleChoice {
+export interface ChoiceScreen {
   id: string;
   question: string;
   description?: {
@@ -184,6 +186,7 @@ export interface SingleChoice {
     [k: string]: unknown;
   } | null;
   image?: (string | null) | Media;
+  questionType: 'single' | 'multiple';
   choices?:
     | {
         text: string;
@@ -191,7 +194,18 @@ export interface SingleChoice {
         id?: string | null;
       }[]
     | null;
-  cta_text?: string | null;
+  ctaText?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "funnels".
+ */
+export interface Funnel {
+  id: string;
+  start_screen?: (string | null) | ContentScreen;
+  onboarding_screens?: (string | ChoiceScreen)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -224,8 +238,12 @@ export interface PayloadLockedDocument {
         value: string | ContentScreen;
       } | null)
     | ({
-        relationTo: 'single-choices';
-        value: string | SingleChoice;
+        relationTo: 'choice-screens';
+        value: string | ChoiceScreen;
+      } | null)
+    | ({
+        relationTo: 'funnels';
+        value: string | Funnel;
       } | null)
     | ({
         relationTo: 'users';
@@ -285,18 +303,19 @@ export interface ContentScreensSelect<T extends boolean = true> {
   question?: T;
   description?: T;
   image?: T;
-  cta_text?: T;
+  ctaText?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "single-choices_select".
+ * via the `definition` "choice-screens_select".
  */
-export interface SingleChoicesSelect<T extends boolean = true> {
+export interface ChoiceScreensSelect<T extends boolean = true> {
   question?: T;
   description?: T;
   image?: T;
+  questionType?: T;
   choices?:
     | T
     | {
@@ -304,7 +323,17 @@ export interface SingleChoicesSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
-  cta_text?: T;
+  ctaText?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "funnels_select".
+ */
+export interface FunnelsSelect<T extends boolean = true> {
+  start_screen?: T;
+  onboarding_screens?: T;
   updatedAt?: T;
   createdAt?: T;
 }

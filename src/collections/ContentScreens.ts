@@ -18,7 +18,7 @@ export const ContentScreens: CollectionConfig = {
       relationTo: 'media'
     },
     {
-      name: 'cta_text',
+      name: 'ctaText',
       type: 'text',
     }
   ],

@@ -1,40 +1,33 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { SingleChoice as SingleChoiceProps } from '@/payload-types'
+import { ChoiceScreen as ChoiceScreenProps } from '@/payload-types'
 import { RichText } from '@payloadcms/richtext-lexical/react'
+import { useFunnelStore } from '@/hooks/useFunnelStore'
 
-type Props = SingleChoiceProps & {
-  onSelect: (id: string) => void
-  selectedChoice: string
-}
-
-export const SingleChoiceScreen = ({
+export const ChoiceScreen = ({
   question,
   description,
   image,
   choices = [],
-  cta_text,
-  onSelect,
-  selectedChoice,
-}: Props) => {
-  const [mounted, setMounted] = useState(false)
-  const [selected, setSelected] = useState<string | undefined>(selectedChoice)
+  ctaText,
+  id,
+}: ChoiceScreenProps) => {
+  const { getScreenState, addUserAnswer } = useFunnelStore()
+  const answers = getScreenState(id)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  console.log({ answers })
 
   const handleSelect = (choiceId: string) => {
-    setSelected(choiceId)
-    onSelect?.(choiceId)
+    addUserAnswer({
+      question,
+      answer: choiceId,
+      screen_id: id,
+    })
   }
-
-  if (!mounted) return null
 
   return (
     <Card className="w-full max-w-[100vw] md:max-w-2xl animate-in fade-in zoom-in duration-500">
@@ -65,8 +58,8 @@ export const SingleChoiceScreen = ({
             choices.map((choice) => (
               <Button
                 key={choice.id}
-                variant={selected === choice.id ? 'default' : 'outline'}
-                className="w-full h-auto min-h-[44px] p-4 flex items-center justify-between text-left"
+                variant={answers === choice.id ? 'default' : 'outline'}
+                className="w-full h-auto min-h-[44px] p-4 flex items-center justify-between text-left cursor-pointer"
                 onClick={() => handleSelect(choice.id || '')}
               >
                 <div className="flex items-center gap-3 flex-1">
@@ -82,19 +75,19 @@ export const SingleChoiceScreen = ({
                   )}
                   <span className="text-base">{choice.text}</span>
                 </div>
-                {selected === choice.id && <Check className="w-5 h-5 shrink-0" />}
+                {answers === choice.id && <Check className="w-5 h-5 shrink-0" />}
               </Button>
             ))}
         </div>
       </CardContent>
-      {cta_text && (
+      {ctaText && (
         <CardFooter>
           <Button
             size="lg"
-            className="w-full text-base font-medium active:scale-[0.98] transition-transform"
-            disabled={!selected}
+            className="w-full text-base font-medium active:scale-[0.98] transition-transform cursor-pointer"
+            disabled={!answers}
           >
-            {cta_text}
+            {ctaText}
           </Button>
         </CardFooter>
       )}

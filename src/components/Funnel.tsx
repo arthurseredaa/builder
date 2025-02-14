@@ -1,31 +1,23 @@
 'use client'
 
 import React from 'react'
-import {
-  ContentScreen as ContentScreenProps,
-  SingleChoice as SingleChoiceProps,
-} from '@/payload-types'
-import { SingleChoiceScreen } from '@/components/screens/single-choice'
-import { ContentScreen } from './screens/content-screen'
+import { Funnel as FunnelProps } from '@/payload-types'
+import { ChoiceScreen } from '@/components/screens/choice-screen'
+import { ContentScreen } from '@/components/screens/content-screen'
 
-type Props = {
-  contentData: ContentScreenProps
-  singleChoiceData: SingleChoiceProps
-}
+/**
+ * 1. User can click - we save answer, send analytics
+ * 2. User can click - we save answer
+ * 3. User can click - we send analytics
+ * 5. User can click - we do nothing
+ * **/
 
-export const Funnel = ({ contentData, singleChoiceData }: Props) => {
-  const onSelect = (id: string) => {
-    console.log(id)
-  }
-
-  return (
-    <div className="safe-area-view min-h-[100dvh] flex items-center justify-center p-4 md:p-6">
-      <ContentScreen {...contentData} />
-      <SingleChoiceScreen
-        {...singleChoiceData}
-        onSelect={onSelect}
-        selectedChoice={singleChoiceData?.choices?.[0].id || ''}
-      />
-    </div>
-  )
-}
+export const Funnel = ({ start_screen, onboarding_screens }: FunnelProps) => (
+  <div className="safe-area-view min-h-[100dvh] flex items-center justify-center p-4 md:p-6">
+    {start_screen && typeof start_screen !== 'string' && <ContentScreen {...start_screen} />}
+    {onboarding_screens &&
+      onboarding_screens.map((data) =>
+        typeof data !== 'string' ? <ChoiceScreen key={data.id} {...data} /> : null,
+      )}
+  </div>
+)
