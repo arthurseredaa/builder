@@ -1,7 +1,7 @@
 import { CollectionConfig } from 'payload'
 
-export const Screens: CollectionConfig = {
-  slug: 'screen',
+export const ContentScreens: CollectionConfig = {
+  slug: 'content-screens',
   fields: [
     {
       name: 'question',
@@ -21,5 +21,11 @@ export const Screens: CollectionConfig = {
       name: 'cta_text',
       type: 'text',
     }
-  ]
+  ],
+  hooks: {
+    afterError: [async ({ error }) => {
+      console.log('content-screens')
+      console.log(error)
+    }]
+  }
 }

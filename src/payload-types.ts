@@ -65,7 +65,8 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
-    screen: Screen;
+    'content-screens': ContentScreen;
+    'single-choices': SingleChoice;
     users: User;
     media: Media;
     'payload-locked-documents': PayloadLockedDocument;
@@ -74,7 +75,8 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    screen: ScreenSelect<false> | ScreenSelect<true>;
+    'content-screens': ContentScreensSelect<false> | ContentScreensSelect<true>;
+    'single-choices': SingleChoicesSelect<false> | SingleChoicesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -115,9 +117,9 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "screen".
+ * via the `definition` "content-screens".
  */
-export interface Screen {
+export interface ContentScreen {
   id: string;
   question: string;
   description?: {
@@ -161,6 +163,40 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "single-choices".
+ */
+export interface SingleChoice {
+  id: string;
+  question: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  image?: (string | null) | Media;
+  choices?:
+    | {
+        text: string;
+        image?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  cta_text?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -184,8 +220,12 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'screen';
-        value: string | Screen;
+        relationTo: 'content-screens';
+        value: string | ContentScreen;
+      } | null)
+    | ({
+        relationTo: 'single-choices';
+        value: string | SingleChoice;
       } | null)
     | ({
         relationTo: 'users';
@@ -239,12 +279,31 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "screen_select".
+ * via the `definition` "content-screens_select".
  */
-export interface ScreenSelect<T extends boolean = true> {
+export interface ContentScreensSelect<T extends boolean = true> {
   question?: T;
   description?: T;
   image?: T;
+  cta_text?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "single-choices_select".
+ */
+export interface SingleChoicesSelect<T extends boolean = true> {
+  question?: T;
+  description?: T;
+  image?: T;
+  choices?:
+    | T
+    | {
+        text?: T;
+        image?: T;
+        id?: T;
+      };
   cta_text?: T;
   updatedAt?: T;
   createdAt?: T;

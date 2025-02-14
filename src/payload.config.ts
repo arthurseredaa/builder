@@ -9,7 +9,8 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { Screens } from './collections/Screens'
+import { ContentScreens } from './collections/ContentScreens'
+import { SingleChoices } from '@/collections/SingleChoices'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,7 +22,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Screens, Users, Media],
+  collections: [ContentScreens, SingleChoices, Users, Media],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

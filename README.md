@@ -1,8 +1,11 @@
-# blank
+# Builder
+Fast and easy-to-use product for generate lead generation funnels
 
-blank
+## Setup
+- tailwind@v4
+- shadcn-ui@canary
+- nextjs@15
+- react@19
 
-## Attributes
-
-- **Database**: mongodb
-- **Storage Adapter**: localDisk
+## Requirements:
+- NodeJS@22 or later
