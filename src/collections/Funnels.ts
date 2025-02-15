@@ -15,5 +15,10 @@ export const Funnels: CollectionConfig = {
       hasMany: true,
       minRows: 2,
     }
-  ]
+  ],
+  admin: {
+    livePreview: {
+      url: ({ data }) => `http://localhost:3000/foxtrot/${data?.id}`,
+    }
+  }
 }
