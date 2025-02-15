@@ -1,9 +1,12 @@
 'use client'
 
 import React from 'react'
+import dynamic from 'next/dynamic'
+
 import { Funnel as FunnelProps } from '@/payload-types'
-import { ChoiceScreen } from '@/components/screens/choice-screen'
-import { ContentScreen } from '@/components/screens/content-screen'
+
+const ChoiceScreen = dynamic(() => import('@/components/screens/choice-screen'), { ssr: false })
+const ContentScreen = dynamic(() => import('@/components/screens/content-screen'), { ssr: false })
 
 /**
  * 1. User can click - we save answer, send analytics

@@ -7,9 +7,8 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { ChoiceScreen as ChoiceScreenProps } from '@/payload-types'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { useFunnelStore } from '@/hooks/useFunnelStore'
-import { useIsClient } from '@/hooks/useIsClient'
 
-export const ChoiceScreen = ({
+const ChoiceScreen = ({
   question,
   description,
   image,
@@ -17,7 +16,6 @@ export const ChoiceScreen = ({
   ctaText,
   id,
 }: ChoiceScreenProps) => {
-  const isClient = useIsClient()
   const { getScreenState, addUserAnswer } = useFunnelStore()
   const answers = getScreenState(id)
 
@@ -30,8 +28,6 @@ export const ChoiceScreen = ({
       screen_id: id,
     })
   }
-
-  if (!isClient) return null
 
   return (
     <Card className="w-full max-w-[100vw] md:max-w-2xl animate-in fade-in zoom-in duration-500">
@@ -98,3 +94,5 @@ export const ChoiceScreen = ({
     </Card>
   )
 }
+
+export default ChoiceScreen
